@@ -1,11 +1,13 @@
 import setupKnex, { type Knex } from 'knex'
+import { env } from '../env'
 
 const migrationsDirectory = new URL('./migrations', import.meta.url).pathname
+const databaseFile = new URL(env.DATABASE_URL, import.meta.url).pathname
 
 export const config: Knex.Config = {
-  client: 'sqlite',
+  client: env.DATABASE_CLIENT,
   connection: {
-    filename: './db.sqlite',
+    filename: databaseFile,
   },
   useNullAsDefault: true,
   migrations: {
