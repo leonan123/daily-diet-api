@@ -1,12 +1,6 @@
-import fastify from 'fastify'
+import { app } from './app'
 
-const server = fastify()
-
-server.get('/hello', () => {
-  return 'Hello World'
-})
-
-server
+app
   .listen({
     port: 3333,
   })
