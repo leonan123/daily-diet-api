@@ -1,20 +1,20 @@
 import type { FastifyInstance } from 'fastify'
-import { $ref } from '../user.schema'
+import { createUserSchema, createUserSchemaResponse } from '../user.schema'
 import { CreateUserController } from '../controllers/create-user.controller'
+import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 export async function createUserRoute(app: FastifyInstance) {
   const createUserController = new CreateUserController()
 
-  app.post(
+  app.withTypeProvider<ZodTypeProvider>().post(
     '/create',
     {
       schema: {
-        body: $ref('createUserSchema'),
+        body: createUserSchema,
         response: {
-          201: $ref('createUserSchemaResponse'),
+          201: createUserSchemaResponse,
         },
       },
-      preHandler: [app.authenticate],
     },
     createUserController.handle,
   )

@@ -1,20 +1,37 @@
 import fastify, { type FastifyReply, type FastifyRequest } from 'fastify'
 import { userRoutes } from './modules/user/user.route'
-import { userSchemas } from './modules/user/user.schema'
 import fastifyJwt, { type FastifyJWT } from '@fastify/jwt'
 import { env } from './env'
+import { mealsRoutes } from './modules/meals/meals.route'
+import {
+  hasZodFastifySchemaValidationErrors,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod'
 
 export const app = fastify()
 
-for (const schema of [...userSchemas]) {
-  app.addSchema(schema)
-}
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
 
 app.register(fastifyJwt, { secret: env.JWT_SECRET })
 
 app.addHook('preHandler', (req, _, next) => {
   req.jwt = app.jwt
   return next()
+})
+
+app.setErrorHandler((err, req, reply) => {
+  if (hasZodFastifySchemaValidationErrors(err)) {
+    return reply.status(400).send({
+      message: 'Validation error',
+      issues: err.validation.flatMap((issue) => issue.params.issue),
+    })
+  }
+
+  return reply.status(500).send({
+    message: 'Internal server error',
+  })
 })
 
 app.decorate(
@@ -43,4 +60,8 @@ app.decorate(
 
 app.register(userRoutes, {
   prefix: '/api/users',
+})
+
+app.register(mealsRoutes, {
+  prefix: '/api/meals',
 })
