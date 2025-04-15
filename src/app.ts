@@ -21,13 +21,15 @@ app.addHook('preHandler', (req, _, next) => {
   return next()
 })
 
-app.setErrorHandler((err, req, reply) => {
+app.setErrorHandler((err, _, reply) => {
   if (hasZodFastifySchemaValidationErrors(err)) {
     return reply.status(400).send({
       message: 'Validation error',
       issues: err.validation.flatMap((issue) => issue.params.issue),
     })
   }
+
+  console.error(err)
 
   return reply.status(500).send({
     message: 'Internal server error',
