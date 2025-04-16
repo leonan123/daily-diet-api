@@ -13,9 +13,7 @@ export class GetUserMealsMetricsController {
 
     const totalMealsOnDiet = totalMeals.filter((meal) => meal.is_on_diet).length
 
-    const totalMealsOffDiet = totalMeals.filter(
-      (meal) => !meal.is_on_diet,
-    ).length
+    const totalMealsOffDiet = totalMeals.length - totalMealsOnDiet
 
     let currentSequence = 0
     let longestSequence = 0
