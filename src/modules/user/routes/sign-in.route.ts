@@ -18,16 +18,4 @@ export async function signInRoute(app: FastifyInstance) {
     },
     signInController.handle,
   )
-  // app.post(
-  //   '/sign-in',
-  //   {
-  //     schema: {
-  //       body: $ref('logInSchema'),
-  //       response: {
-  //         200: $ref('logInSchemaResponse'),
-  //       },
-  //     },
-  //   },
-  //   signInController.handle,
-  // )
 }
