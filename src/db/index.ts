@@ -8,6 +8,7 @@ export const config: Knex.Config = {
   client: env.DATABASE_CLIENT,
   connection: {
     filename: databaseFile,
+    timezone: 'utc',
   },
   useNullAsDefault: true,
   migrations: {

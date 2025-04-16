@@ -56,3 +56,16 @@ export const getMealsRouteResponse = z.object({
 })
 
 export type GetMealsRouteResponse = z.infer<typeof getMealsRouteResponse>
+
+// GET MEAL
+export const getMealRouteResponse = z.object({
+  meal: z.object({
+    id: z.string(),
+    name: z.string(),
+    isOnDiet: z.coerce.boolean(),
+    description: z.string(),
+    occurredAt: z.string(),
+  }),
+})
+
+export type GetMealRouteResponse = z.infer<typeof getMealRouteResponse>
